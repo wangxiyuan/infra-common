@@ -11,3 +11,7 @@ spec:
   #We need set this into 'Local' since we need get the client IP of elb.
   externalTrafficPolicy: Local
   loadBalancerIP: 159.138.8.107
+  ports:
+    - port: 30500
+      name: jenkins-agent
+      targetPort: 30500
