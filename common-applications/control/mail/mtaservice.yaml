@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: mailman-exim4
-          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:b02f9e275d30797cbf061ddc0a42c867c89ce6fb1659169666
+          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:v4.92
           imagePullPolicy: "IfNotPresent"
           volumeMounts:
             - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
