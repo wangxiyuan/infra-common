@@ -44,12 +44,12 @@ spec:
           tcpSocket:
             port: 3000
           timeoutSeconds: 5
-        volumeMounts:
-        - mountPath: /etc/gitea/app.ini
-          subPath: config
-          name: secret
-      volumes:
-      - name: secret
-        secret:
-          secretName: gitea-repo-secret
+        # volumeMounts:
+        # - mountPath: /etc/gitea/app.ini
+        #   subPath: config
+        #   name: secret
+      # volumes:
+      # - name: secret
+      #   secret:
+      #     secretName: gitea-repo-secret
 
