@@ -12,4 +12,4 @@ kind: Kustomization
 namespace: openeuler-devops
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/website
-  newTag: master-ce255e
+  newTag: master-9c9bdf
