@@ -3,6 +3,7 @@ resources:
 - sa.yaml
 - merlin-server
 - merlin-website
+- merlin-docs
 - hook-delivery
 - label
 namespace: merlin
