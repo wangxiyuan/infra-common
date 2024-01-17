@@ -2,7 +2,6 @@ resources:
 - deployment.yaml
 - namespace.yaml
 - ingress.yaml
-- pvc.yaml
 - service.yaml
 - sa.yaml
 commonAnnotations:

@@ -6,7 +6,6 @@ resources:
 - workflow-runner
 - event-selector
 - workflow-event-handler
-- post-extract-handler
 - job-event-handler
 - job-status-handler
 - user-management
