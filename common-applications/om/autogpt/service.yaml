@@ -8,4 +8,6 @@ spec:
     - name: http
       port: 8000
       targetPort: 8000
+  selector:
+    app: autogpt
   type: ClusterIP
