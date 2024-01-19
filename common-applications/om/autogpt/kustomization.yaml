@@ -4,6 +4,7 @@ resources:
 - ingress.yaml
 - service.yaml
 - sa.yaml
+- secrets.yaml
 commonAnnotations:
   kubernetes.ops.cluster: mindspore-cn4-x86
   kubernetes.ops.email: ""
