@@ -1,0 +1,15 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: rsync-server-autoscaler
+  namespace: openeuler-repo-mirror
+spec:
+  scaleTargetRef:
+    name: rsync-server
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Asia/Shanghai
+      start: 0 9 * * *
+      end: 30 20 * * *
+      desiredReplicas: "1"
