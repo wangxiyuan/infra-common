@@ -12,3 +12,6 @@ commonAnnotations:
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: openeuler-repo-mirror
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/repo-client
+  newTag: rsync-22.03-lts-sp1-20240119
