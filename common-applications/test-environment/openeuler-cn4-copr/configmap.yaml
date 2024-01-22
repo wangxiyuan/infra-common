@@ -185,12 +185,12 @@ data:
       # 规格映射
       flavorMapping:
         x86:
-            imageRef: d2be6411-5b26-4f12-aac2-5b3b7f5bae36
+            imageRef: 5ca18b99-ff5e-4433-8fd4-9d84d21d5e98
             l1: c3.xlarge.2
             l2: c3ne.xlarge.2
             l3: hc2.xlarge.2
         aarch64:
-            imageRef: d2be6411-5b26-4f12-aac2-5b3b7f5bae36
+            imageRef: 06472167-d5b7-4fad-a61a-fa1df3652a27
             l1: kc1.xlarge.2
             l2: kc1.xlarge.2
             l3: kc1.xlarge.2
