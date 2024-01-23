@@ -10,6 +10,7 @@ resources:
   - gitee-foundation
   - git-commit-log-foundation
   - git-commit-log-oepkgs
+  - gitee-modelx
 commonAnnotations:
   owner: zhongjun
   email: "jun.zhongjun2@gmail.com"
