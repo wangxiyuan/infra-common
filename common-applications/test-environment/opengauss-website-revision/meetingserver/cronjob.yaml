@@ -23,6 +23,24 @@ spec:
               {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
               {{ .Data.data.config }}
               {{- end }}
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverCrt  }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverKey }}
+              {{- end }}
         spec:
           restartPolicy: OnFailure
           imagePullSecrets:
@@ -75,6 +93,24 @@ spec:
               {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
               {{ .Data.data.config }}
               {{- end }}
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverCrt  }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverKey }}
+              {{- end }}
         spec:
           restartPolicy: OnFailure
           imagePullSecrets:
@@ -120,6 +156,24 @@ spec:
               {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
               {{ .Data.data.config }}
               {{- end }}
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverCrt  }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverKey }}
+              {{- end }}
         spec:
           restartPolicy: OnFailure
           imagePullSecrets:
@@ -164,6 +218,24 @@ spec:
             vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
               {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
               {{ .Data.data.config }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverCrt  }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+              {{ .Data.data.serverKey }}
               {{- end }}
         spec:
           restartPolicy: OnFailure

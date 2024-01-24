@@ -28,31 +28,42 @@ spec:
           {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
           {{ .Data.data.rasp }}
           {{- end }}
+        vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+        vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-ca.pem: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.MysqlCA }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.serverCrt  }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.serverKey }}
+          {{- end }}
       labels:
         app: meetingserver
     spec:
       containers:
-      - command:
-        - /bin/bash
-        - -c
-        - |
-          strip -R .note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.11.3
-          cp /vault/secrets/xarmor_pyrasp.ini /work/app-meeting-server/xarmor_pyrasp.ini
-          rm -rf /vault/secrets/xarmor_pyrasp.ini
-          python manage.py collectstatic
-          python manage.py makemigrations
-          python manage.py migrate
-          python manage.py sync_sigs
-          python manage.py upgrade_users
-          exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
-        env:
+      - env:
         - name: TZ
           value: Asia/Shanghai
         - name: CONFIG_PATH
           value: /vault/secrets/secrets.yaml
         - name: XARMOR_CONF
           value: /work/app-meeting-server/xarmor_pyrasp.ini
-        image: swr.ap-southeast-1.myhuaweicloud.com/infra-hk/openeuler/meetingserver:dev_merge_opengauss-3eec9a
+        - name: MYSQL_TLS_PEM_PATH
+          value: /vault/secrets/ca.pem
+        - name: TLS_CRT_PATH
+          value: /vault/secrets/server.crt
+        - name: TLS_KEY_PATH
+          value: /vault/secrets/server.key
+        image: swr.ap-southeast-1.myhuaweicloud.com/infra-hk/openeuler/meetingserver:dev_merge_opengauss-651918
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3

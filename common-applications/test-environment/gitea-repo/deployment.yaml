@@ -2,30 +2,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gitea-repo-deployment
-  namespace: gitea-repo
+  name: gitea-repo-sh-deployment
+  namespace: gitea-repo-sh
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: gitea-repo
+      app: gitea-repo-sh
   template:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'gitea-repo'
-        vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/infra-test/gitea'
+        vault.hashicorp.com/role: 'gitea-repo-sh'
+        vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/infra-test/gitea-repo-sh'
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-app.ini: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
         vault.hashicorp.com/agent-inject-template-app.ini: |  
-          {{- with secret "internal/data/infra-test/gitea" -}}  
+          {{- with secret "internal/data/infra-test/gitea-repo-sh" -}}  
           {{ .Data.data.app }}
           {{- end }}
       labels:
-        app: gitea-repo
+        app: gitea-repo-sh
     spec:
       serviceAccount: gitea-repo
       imagePullSecrets:
@@ -64,7 +64,12 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/gitea/
           name: data-volume
+        - mountPath: /tmp/
+          name: tmp-gitea-sh-data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: gitea-repo-data-volume
+          claimName: gitea-repo-sh-data-volume
+      - name: tmp-gitea-sh-data-volume
+        persistentVolumeClaim:
+          claimName: tmp-gitea-sh-data-volume

@@ -1,0 +1,65 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rsync-server
+  namespace: openeuler-repo-mirror
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rsync-server
+  template:
+    metadata:
+      labels:
+        app: rsync-server
+    spec:
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      nodeSelector:
+        autoscaler: "true"
+      containers:
+      - name: rsync-server
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/repo-client:rsync-22.03-lts-sp1-20240111
+        volumeMounts:
+        - mountPath: /repo/openeuler
+          name: data-volume
+        - mountPath: /etc/rsyncd.conf
+          name: rsync-configmap-volume
+          subPath: rsyncd.conf
+        command:
+        - /bin/bash
+        - -c
+        - rsync --no-detach --daemon --config /etc/rsyncd.conf
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 873
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 873
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1000Mi
+          limits:
+            cpu: 500m
+            memory: 1000Mi
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: openeuler-repo-server-volume
+      - configMap:
+          defaultMode: 420
+          name: rsync-configmap-volume
+        name: rsync-configmap-volume

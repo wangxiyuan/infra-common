@@ -25,13 +25,13 @@ spec:
         vault.hashicorp.com/agent-inject-perms-etcd_client.crt: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.crt: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdCrt }}
+          {{ .Data.data.etcdClientCrt }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_client.key: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_client.key: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.key: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdKey }}
+          {{ .Data.data.etcdClientKey }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_ca.crt: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_ca.crt: "0400"
@@ -39,17 +39,17 @@ spec:
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
           {{ .Data.data.etcdCA }}
           {{- end }}
-        vault.hashicorp.com/agent-inject-secret-etcd_peer.crt: 'internal/data/infra-test/openeuler-devops'
-        vault.hashicorp.com/agent-inject-perms-etcd_peer.crt: "0400"
-        vault.hashicorp.com/agent-inject-template-etcd_peer.crt: |  
+        vault.hashicorp.com/agent-inject-secret-etcd_server.crt: 'internal/data/infra-test/openeuler-devops'
+        vault.hashicorp.com/agent-inject-perms-etcd_server.crt: "0400"
+        vault.hashicorp.com/agent-inject-template-etcd_server.crt: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdPeerCrt }}
+          {{ .Data.data.etcdServerCrt }}
           {{- end }}
-        vault.hashicorp.com/agent-inject-secret-etcd_peer.key: 'internal/data/infra-test/openeuler-devops'
-        vault.hashicorp.com/agent-inject-perms-etcd_peer.key: "0400"
-        vault.hashicorp.com/agent-inject-template-etcd_peer.key: |  
+        vault.hashicorp.com/agent-inject-secret-etcd_server.key: 'internal/data/infra-test/openeuler-devops'
+        vault.hashicorp.com/agent-inject-perms-etcd_server.key: "0400"
+        vault.hashicorp.com/agent-inject-template-etcd_server.key: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdPeerKey }}
+          {{ .Data.data.etcdServerKey }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd.yaml: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd.yaml: "0400"
@@ -74,11 +74,11 @@ spec:
           value: "/etc/ods/etcd.yaml"
         resources:
           limits:
-            cpu: 500m
-            memory: 500Mi
+            cpu: "2"
+            memory: 8Gi
           requests:
-            cpu: 500m
-            memory: 500Mi
+            cpu: "2"
+            memory: 4Gi
         ports:
           - name: client
             containerPort: 2379

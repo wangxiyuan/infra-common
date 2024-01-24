@@ -22,7 +22,7 @@ spec:
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openlookeng/openlookeng_website_docs_test:dc52ae4ede44d118a6b884007d2c88e2c8d047a5
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 80
+        - containerPort: 8080
           name: http
           protocol: TCP
         resources:

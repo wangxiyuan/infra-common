@@ -21,6 +21,9 @@ spec:
               volumeMounts:
                 - mountPath: /home/patches
                   name: patchwork-file-volume
+                - mountPath: /home/patchwork/patchwork/repositories_branches_map.yaml
+                  name: patchwork-configmap
+                  subPath: repositories_branches_map.yaml
               env:
                 - name: DATABASE_NAME
                   valueFrom:
@@ -168,6 +171,10 @@ spec:
             - name: patchwork-file-volume
               persistentVolumeClaim:
                 claimName: patchwork-file-data
+            - configMap:
+                defaultMode: 420
+                name: patchwork-configmap
+              name: patchwork-configmap
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

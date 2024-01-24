@@ -1,15 +1,15 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: website-deployment-autoscaler
-  namespace: unified-vulnerability-platform
+  name: rsync-server-autoscaler
+  namespace: openeuler-repo-mirror
 spec:
   scaleTargetRef:
-    name: website-deployment
+    name: rsync-server
   triggers:
   - type: cron
     metadata:
       timezone: Asia/Shanghai
-      start: 30 8 * * *
-      end: 55 23 * * *
+      start: 0 9 * * *
+      end: 30 20 * * *
       desiredReplicas: "1"

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rsync-configmap-volume
+  namespace: openeuler-repo-mirror
+data:
+  rsyncd.conf: |
+    log file = /dev/stdout
+    use chroot = yes
+    uid = root
+    gid = root
+    max connections = 10
+    timeout = 600
+    read only = yes
+
+    [openeuler]
+    path = /repo/openeuler
+    comment = openeuler repo folder
+    read only = true
+    ignore nonreadable = yes
+    refuse options = checksum
+    dont compress = *

@@ -1,11 +1,11 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: uvp-deployment-autoscaler
-  namespace: unified-vulnerability-platform
+  name: merilin-docs-autoscaler
+  namespace: merlin
 spec:
   scaleTargetRef:
-    name: uvp-deployment
+    name: website
   triggers:
   - type: cron
     metadata:

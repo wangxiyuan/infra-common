@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openeuler-repo-server-volume
+  namespace: openeuler-repo-mirror
+  labels:
+    failure-domain.beta.kubernetes.io/zone: ap-southeast-1a
+  annotations:
+    everest.io/disk-volume-type: SSD
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: csi-disk

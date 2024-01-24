@@ -1,0 +1,19 @@
+resources:
+- deployment.yaml
+- namespace.yaml
+- ingress.yaml
+- service.yaml
+- sa.yaml
+- secrets.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: mindspore-cn4-x86
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: ""
+  kubernetes.ops.owner: wucaiping
+  kubernetes.ops.region: bj
+namespace: autogpt
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/autogpt-test
+  newTag: main-ed096c

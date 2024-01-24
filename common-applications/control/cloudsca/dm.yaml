@@ -54,11 +54,11 @@ spec:
                 key: rootSalt
         resources:
           requests:
-            cpu: 200m
-            memory: 2G
+            cpu: 6000m
+            memory: 18G
           limits:
-            cpu: 2000m
-            memory: 6G
+            cpu: 6000m
+            memory: 18G
         volumeMounts:
         - mountPath: /work/work.ks
           name: secret-volume

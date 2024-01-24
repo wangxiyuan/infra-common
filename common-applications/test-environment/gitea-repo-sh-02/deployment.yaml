@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea-repo-sh-02-deployment
+  namespace: gitea-repo-sh-02
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gitea-repo-sh-02
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'gitea-repo-sh-02'
+        vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/infra-test/gitea-repo-sh-02'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-app.ini: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-template-app.ini: |  
+          {{- with secret "internal/data/infra-test/gitea-repo-sh-02" -}}  
+          {{ .Data.data.app }}
+          {{- end }}
+      labels:
+        app: gitea-repo-sh-02
+    spec:
+      serviceAccount: gitea-repo-sh-02
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: gitea-build
+        image: swr.cn-southwest-2.myhuaweicloud.com/modelfoundry/gitea/gitea-build:new
+        imagePullPolicy: IfNotPresent
+        args:
+        - --config=/vault/secrets/app.ini
+        resources:
+          requests:
+            cpu: "6"
+            memory: 10000Mi
+          limits:
+            cpu: "6"
+            memory: 10000Mi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 3000
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 3000
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /var/lib/gitea/
+          name: data-volume
+        - mountPath: /tmp/
+          name: tmp-gitea-sh-02-data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: gitea-repo-sh-02-data-volume
+      - name: tmp-gitea-sh-02-data-volume
+        persistentVolumeClaim:
+          claimName: tmp-gitea-sh-02-data-volume

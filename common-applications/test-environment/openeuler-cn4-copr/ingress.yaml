@@ -15,10 +15,6 @@ spec:
       - backend:
           serviceName: copr-distgit
           servicePort: 5001
-        path: /cgit/
-      - backend:
-          serviceName: copr-distgit
-          servicePort: 5001
         path: /cgit-data/
       - backend:
           serviceName: copr-backend

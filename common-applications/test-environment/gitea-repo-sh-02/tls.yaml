@@ -1,0 +1,19 @@
+---
+apiVersion: secrets-manager.tuenti.io/v1alpha1
+kind: SecretDefinition
+metadata:
+  name: gitea-repo-sh-02-tls
+  namespace: gitea-repo-sh-02
+spec:
+  name: gitea-repo-sh-02-tls
+  keysMap:
+    ca.crt:
+      path: secrets/data/infra-test/domain-tls
+      key: tls.cert
+    tls.crt:
+      path: secrets/data/infra-test/domain-tls
+      key: tls.cert
+    tls.key:
+      path: secrets/data/infra-test/domain-tls
+      key: tls.key
+
