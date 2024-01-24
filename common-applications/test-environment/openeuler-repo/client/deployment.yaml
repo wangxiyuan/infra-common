@@ -49,17 +49,17 @@ spec:
           failureThreshold: 3
           timeoutSeconds: 5
       - name: rsync-client
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/repo-client:rsync-22.03-lts-sp1-20240104
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/repo-client:rsync-22.03-lts-sp1-20240111
         volumeMounts:
         - mountPath: /repo/openeuler
           name: data-volume
         env:
           - name: TARGET_DIR
-            value: "/repo/openeuler/openEuler-22.09/"
+            value: "/repo/openeuler/openEuler-20.03-LTS/"
           - name: RSYNC_INTERNAL
             value: "600"
           - name: SYNC_HOST
-            value: "rsync://root@mirrors.nju.edu.cn/openeuler/openEuler-22.09/"
+            value: "rsync://root@rsync-server.openeuler-repo-mirror.svc.cluster.local/openeuler/openEuler-20.03-LTS/"
           - name: ADDITIONAL_PARAMETERS
             value: "--delete"
         resources:

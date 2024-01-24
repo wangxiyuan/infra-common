@@ -13,9 +13,9 @@ commonAnnotations:
   kubernetes.ops.os.base: debian
   kubernetes.ops.owner: georgecao
   kubernetes.ops.region: hk
-namespace: gitea-repo
+namespace: gitea-repo-sh
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build
-  newTag: v1.0.20231227171425
+  newTag: v1.0.20231228084415

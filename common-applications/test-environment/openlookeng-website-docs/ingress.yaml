@@ -22,5 +22,5 @@ spec:
         paths:
           - backend:
               serviceName: openlookeng-website-docs-service
-              servicePort: 80
+              servicePort: 8080
             path: /

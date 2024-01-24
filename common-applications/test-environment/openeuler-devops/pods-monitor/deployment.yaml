@@ -36,13 +36,13 @@ spec:
         vault.hashicorp.com/agent-inject-perms-etcd_client.crt: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.crt: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdCrt }}
+          {{ .Data.data.etcdPodsMonitorCrt }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_client.key: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_client.key: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.key: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdKey }}
+          {{ .Data.data.etcdPodsMonitorKey }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_ca.crt: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_ca.crt: "0400"
@@ -70,7 +70,7 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 500Mi
+            memory: 1Gi
           requests:
             cpu: 500m
             memory: 500Mi

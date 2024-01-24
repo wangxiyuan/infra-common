@@ -1,40 +1,32 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    everest.io/disk-volume-type: ssd
+  name: gitea-repo-sh-data-volume
+  namespace: gitea-repo-sh
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: csi-disk
+  volumeMode: Filesystem
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   annotations:
     everest.io/disk-volume-type: ssd
-  name: gitea-repo-data-volume
-  namespace: gitea-repo
+  name: tmp-gitea-sh-data-volume
+  namespace: gitea-repo-sh
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  storageClassName: csi-disk-sas
+      storage: 100Gi
+  storageClassName: csi-disk
   volumeMode: Filesystem
-
----
-  apiVersion: v1                                                                                                                                                                                                         
-  kind: PersistentVolumeClaim                                                                                                                                                                                            
-  metadata:                                                                                                                                                                                                              
-    annotations:                                                                                                                                                                                                         
-      csi.storage.k8s.io/fstype: obsfs                                                                                                                                                                                   
-      csi.storage.k8s.io/node-publish-secret-name: gitea-test                                                                                                                                                            
-      csi.storage.k8s.io/node-publish-secret-namespace: gitea-repo                                                                                                                                                       
-      everest.io/enterprise-project-id: "0"                                                                                                                                                                              
-      everest.io/obs-volume-type: STANDARD                                                                                                                                                                               
-      pv.kubernetes.io/bind-completed: "yes"                                                                                                                                                                             
-      volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner
-    name: pvc-obs-gitea-test
-    namespace: gitea-repo
-  spec:                                                                                                                                                                                                                  
-    accessModes:                                                                                                                                                                                                         
-    - ReadWriteMany                                                                                                                                                                                                      
-    resources:                                                                                                                                                                                                           
-      requests:                                                                                                                                                                                                          
-        storage: 1Gi                                                                                                                                                                                                     
-    storageClassName: csi-obs                                                                                                                                                                                            
-    volumeMode: Filesystem                                                                                                                                                                                             
-    volumeName: pv-obs-gitea-test

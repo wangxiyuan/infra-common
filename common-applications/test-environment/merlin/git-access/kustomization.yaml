@@ -3,12 +3,14 @@ commonAnnotations:
   kubernetes.ops.cluster: test
   kubernetes.ops.email: ""
   kubernetes.ops.os.base: openeuler
-  kubernetes.ops.owner: zhangyizheng
+  kubernetes.ops.owner: chenzeng
   kubernetes.ops.region: shanghai
 images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/post_extract_handler
-  newTag: v1.0.20240104190419
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-git-access-test
+  newTag: yw_mutipart-e694ab
 kind: Kustomization
-namespace: openeuler-devops
+namespace: merlin
 resources:
+- service.yaml
 - deployment.yaml
+- autoscaler.yaml

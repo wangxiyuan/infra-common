@@ -4,6 +4,7 @@ metadata:
   name: event-selector-deployment
   namespace: openeuler-devops
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: event-selector
@@ -42,13 +43,13 @@ spec:
         vault.hashicorp.com/agent-inject-perms-etcd_client.crt: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.crt: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdCrt }}
+          {{ .Data.data.etcdEventSelectorCrt }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_client.key: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_client.key: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.key: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdKey }}
+          {{ .Data.data.etcdEventSelectorKey }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_ca.crt: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_ca.crt: "0400"
@@ -59,6 +60,16 @@ spec:
       labels:
         app: event-selector
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - event-selector
+            topologyKey: kubernetes.io/hostname
       serviceAccount: openeuler-devops
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
@@ -80,7 +91,7 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 500Mi
+            memory: 1Gi
           requests:
             cpu: 500m
             memory: 500Mi

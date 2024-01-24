@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autogpt-deployment
+  namespace: autogpt
+  labels:
+    app: autogpt
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: autogpt
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: 'autogpt'
+        vault.hashicorp.com/agent-run-as-user: "1001"
+        vault.hashicorp.com/agent-run-as-group: "1001"
+        vault.hashicorp.com/agent-inject-perms-config.ini: "0400"
+        vault.hashicorp.com/agent-inject-secret-config.ini: 'internal/data/infra-test/autogpt'
+        vault.hashicorp.com/agent-inject-template-config.ini: |  
+          {{- with secret "internal/data/infra-test/autogpt" -}}  
+          {{ .Data.data.config }}
+          {{- end }}
+      labels:
+        app: autogpt
+    spec:
+      tolerations:
+      - key: "GPU"
+        operator: "Equal"
+        value: "false"
+        effect: "NoSchedule"
+      serviceAccountName: autogpt
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: autogpt
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/autogpt-test:main-5cc072
+        env:
+        - name: APPLICATION_PATH
+          value: "/vault/secrets/config.ini"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 50Gi
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+            nvidia.com/gpu: "1"
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8000
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8000
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /home/dbgpt/opt/modelapi
+          name: autogpt-model-volume
+      volumes:
+      - name: autogpt-model-volume
+        persistentVolumeClaim:
+          claimName: pvc-obs-autogpt

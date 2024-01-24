@@ -1,16 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitea-repo
-  namespace: gitea-repo
+  name: gitea-repo-sh
+  namespace: gitea-repo-sh
 spec:
   ports:
   - name: https-port
-    protocol: TCP
     port: 3000
+    protocol: TCP
     targetPort: 3000
   selector:
-    app: gitea-repo
+    app: gitea-repo-sh
+  sessionAffinity: None
   type: ClusterIP
-
-  

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: om-webserver-sh
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 10
   strategy:
     type: Recreate

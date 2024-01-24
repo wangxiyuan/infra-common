@@ -1,11 +1,11 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: gitea-repo-autoscaler
-  namespace: gitea-repo
+  name: gitea-repo-sh-autoscaler
+  namespace: gitea-repo-sh
 spec:
   scaleTargetRef:
-    name: gitea-repo-deployment
+    name: gitea-repo-sh-deployment
   triggers:
   - type: cron
     metadata:

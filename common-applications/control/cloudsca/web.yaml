@@ -32,11 +32,11 @@ spec:
             value: sca-web
         resources:
           requests:
-            cpu: 300m
-            memory: 500Mi
+            cpu: 500m
+            memory: 1000Mi
           limits:
-            cpu: 2000m
-            memory: 2048Mi
+            cpu: 500m
+            memory: 1000Mi
 
 ---
 # Service
