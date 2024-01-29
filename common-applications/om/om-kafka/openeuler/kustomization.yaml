@@ -10,6 +10,7 @@ resources:
   - statewall-ci-mistake
   - community-tracker
   - user-apply
+  - model-foundry
 commonAnnotations:
   owner: zhongjun
   email: "jun.zhongjun2@gmail.com"
