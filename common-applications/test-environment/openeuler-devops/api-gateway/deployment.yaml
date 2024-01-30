@@ -2,14 +2,14 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: website
+  name: api-gateway
   namespace: openeuler-devops
   labels:
-    name: website
+    name: api-gateway
 spec:
   selector:
     matchLabels:
-      name: website
+      name: api-gateway
   template:
     metadata:
       annotations:
@@ -32,14 +32,14 @@ spec:
           {{ .Data.data.ServerKey }}
           {{- end }}
       labels:
-        name: website
+        name: api-gateway
     spec:
       serviceAccount: openeuler-devops
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
       containers:
-      - name: website
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/website:master-646b94
+      - name: api-gateway
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/api-gateway:master-d3d5b2
         resources:
           requests:
             cpu: 200m

@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: workflow-schedule-deployment
+  name: chronos-scheduler-deployment
   namespace: openeuler-devops
 spec:
   selector:
     matchLabels:
-      app: workflow-schedule
+      app: chronos-scheduler
   strategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -42,13 +42,13 @@ spec:
         vault.hashicorp.com/agent-inject-perms-etcd_client.crt: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.crt: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdWorkflowScheduleCrt }}
+          {{ .Data.data.etcdChronosSchedulerCrt }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_client.key: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_client.key: "0400"
         vault.hashicorp.com/agent-inject-template-etcd_client.key: |  
           {{- with secret "internal/data/infra-test/openeuler-devops" -}}  
-          {{ .Data.data.etcdWorkflowScheduleKey }}
+          {{ .Data.data.etcdChronosSchedulerKey }}
           {{- end }}
         vault.hashicorp.com/agent-inject-secret-etcd_ca.crt: 'internal/data/infra-test/openeuler-devops'
         vault.hashicorp.com/agent-inject-perms-etcd_ca.crt: "0400"
@@ -57,23 +57,28 @@ spec:
           {{ .Data.data.etcdCA }}
           {{- end }}
       labels:
-        app: workflow-schedule
+        app: chronos-scheduler
     spec:
       serviceAccount: openeuler-devops
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
       containers:
-      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/workflow_schedule:master-c3caa5
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/chronos_scheduler:master-eeeee6
         imagePullPolicy: IfNotPresent 
         args:
         - --enable_debug=true        
         volumeMounts:
         - mountPath: /srv/log
-          name: workflow-schedule-data-volume
+          name: chronos-scheduler-data-volume
         env:
         - name: LOG_ROOT_DIR
           value: "/srv/log"
-        name: workflow-schedule
+        - name: WORKER_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        name: chronos-scheduler
         resources:
           limits:
             cpu: 500m
@@ -81,23 +86,7 @@ spec:
           requests:
             cpu: 500m
             memory: 500Mi
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 20062
-          timeoutSeconds: 5
-        readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 20062
-          timeoutSeconds: 5
       volumes:        
-        - name: workflow-schedule-data-volume
+        - name: chronos-scheduler-data-volume
           persistentVolumeClaim:
-            claimName: workflow-schedule-data-volume
+            claimName: chronos-scheduler-data-volume

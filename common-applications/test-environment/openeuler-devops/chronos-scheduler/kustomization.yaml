@@ -6,10 +6,9 @@ commonAnnotations:
   kubernetes.ops.owner: zhangyizheng
   kubernetes.ops.region: shanghai
 images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/workflow_schedule
-  newTag: v1.0.20240117170545
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/chronos_scheduler
+  newTag: master-eeeee6
 kind: Kustomization
 namespace: openeuler-devops
 resources:
-- service.yaml
 - deployment.yaml
