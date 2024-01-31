@@ -37,6 +37,7 @@ spec:
         args:
         - --port=8080
         - --config-file=/vault/secrets/compose-config.yml
+        - --rm-cfg=true
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
