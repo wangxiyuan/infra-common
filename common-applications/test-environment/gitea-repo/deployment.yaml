@@ -27,11 +27,9 @@ spec:
       labels:
         app: gitea-repo-sh
     spec:
-      serviceAccount: gitea-repo
+      serviceAccount: gitea-repo-sh
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
-      nodeSelector:
-        autoscaler: "true"
       containers:
       - name: gitea-build
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:6b8591254cd6577c4114dc4140b79453515a6848811a1bfcc52519c6131a4f7a
