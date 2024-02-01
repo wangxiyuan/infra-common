@@ -7,7 +7,7 @@ commonAnnotations:
   kubernetes.ops.region: shanghai
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-server-test
-  newTag: sendmail-c51216
+  newTag: sendmail-649c0d
 kind: Kustomization
 namespace: merlin
 resources:
