@@ -17,13 +17,25 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'merlin'
         vault.hashicorp.com/agent-inject-secret-delivery.yaml: 'internal/data/infra-test/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-pre-populate-only: "true"
+	vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-inject-perms-delivery.yaml: "0400"
         vault.hashicorp.com/agent-run-as-user: "5000"
         vault.hashicorp.com/agent-run-as-group: "5000"
         vault.hashicorp.com/agent-inject-template-delivery.yaml: |  
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.HookDelivery }}
+          {{- end }}
+	vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/infra-test/merlin" -}}  
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/infra-test/merlin" -}}  
+          {{ .Data.data.ServerKey }}
           {{- end }}
       labels:
         app: hook-delivery
