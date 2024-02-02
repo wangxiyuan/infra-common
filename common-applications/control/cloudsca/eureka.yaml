@@ -64,11 +64,6 @@ spec:
             secretKeyRef:
               name: sca-secret
               key: majun_access_token
-        - name: scaSalt
-          valueFrom:
-            secretKeyRef:
-              name: sca-secret
-              key: scaSalt
         resources:
           requests:
             cpu: 200m
