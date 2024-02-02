@@ -24,7 +24,7 @@ images:
   newTag: v1.0.20230704162819
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/nginx
   newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/nginx
-  newTag: v1.0.20231207122528
+  newTag: v1.0.20240202155150
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/openqa_reader
   newTag: v1.0.20240202151920
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/periodic_worker
