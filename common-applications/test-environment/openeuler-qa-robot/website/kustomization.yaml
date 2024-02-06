@@ -15,4 +15,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/qa-robot-test
-  newTag: 989a89c3fcbb3516febbdcbd43bbccc21d3578d7
+  newTag: 970e4c916a65d66cc90e83a48d1d5961291fcaa6
