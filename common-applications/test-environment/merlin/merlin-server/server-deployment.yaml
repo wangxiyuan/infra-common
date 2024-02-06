@@ -75,6 +75,8 @@ spec:
         - --config-file=/vault/secrets/compose-config.yml
         - --enable_debug=true
         - --rm-cfg=false
+        - --cert=/vault/secrets/server.crt
+        - --key=/vault/secrets/server.key
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
