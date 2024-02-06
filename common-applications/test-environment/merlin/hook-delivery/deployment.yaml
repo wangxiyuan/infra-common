@@ -73,3 +73,6 @@ spec:
           requests:
             cpu: 500m
             memory: 500Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 5000
