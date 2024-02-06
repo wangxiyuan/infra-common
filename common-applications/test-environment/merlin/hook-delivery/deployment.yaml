@@ -49,6 +49,8 @@ spec:
         args:
         - --port=8080
         - --config-file=/vault/secrets/delivery.yaml
+        - --cert=/vault/secrets/server.crt
+        - --key=/vault/secrets/server.key
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
