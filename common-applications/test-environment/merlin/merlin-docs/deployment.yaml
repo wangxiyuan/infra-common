@@ -51,26 +51,39 @@ spec:
       - name: merlin-docs
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-docs-test:main-e9b677
         imagePullPolicy: IfNotPresent
+        env:
+        - name: DET_URL
+          value: https://modelfoundry-docs.test.osinfra.cn
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
         readinessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 10
           failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          periodSeconds: 10
-          timeoutSeconds: 5
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8080
+            httpHeaders:
+            - name: "Host"
+              value: "modelfoundry-docs.test.osinfra.cn"
+          timeoutSeconds: 10
         livenessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 20
-          periodSeconds: 20
-          successThreshold: 1
           failureThreshold: 3
-          timeoutSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8080
+            httpHeaders:
+            - name: "Host"
+              value: "modelfoundry-docs.test.osinfra.cn"
+          timeoutSeconds: 10
         resources:
           requests:
             cpu: 500m

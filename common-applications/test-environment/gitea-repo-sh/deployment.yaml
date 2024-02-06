@@ -16,13 +16,25 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'gitea-repo'
         vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/infra-test/gitea-repo'
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-app.ini: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
         vault.hashicorp.com/agent-inject-template-app.ini: |  
           {{- with secret "internal/data/infra-test/gitea-repo" -}}  
           {{ .Data.data.app }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/infra-test/merlin" -}}  
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/infra-test/merlin" -}}  
+          {{ .Data.data.ServerKey }}
           {{- end }}
       labels:
         app: gitea-repo
@@ -32,7 +44,7 @@ spec:
       - name: huawei-swr-image-pull-secret
       containers:
       - name: gitea-build
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:6b8591254cd6577c4114dc4140b79453515a6848811a1bfcc52519c6131a4f7a
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:v1.0.20240201091417
         imagePullPolicy: IfNotPresent
         args:
         - --config=/vault/secrets/app.ini
@@ -43,22 +55,32 @@ spec:
           limits:
             cpu: "6"
             memory: 10000Mi
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 3000
-          timeoutSeconds: 5
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 3000
-          timeoutSeconds: 5
+            httpHeaders:
+            - name: "Host"
+              value: "gitea.test.osinfra.cn"
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 3000
+            httpHeaders:
+            - name: "Host"
+              value: "gitea.test.osinfra.cn"
+          timeoutSeconds: 10
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
