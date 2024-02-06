@@ -53,19 +53,23 @@ spec:
         - --key=/vault/secrets/server.key
         livenessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 8080
           timeoutSeconds: 5
         name: hook-delivery
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 8080
           timeoutSeconds: 5
         resources:
