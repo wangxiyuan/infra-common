@@ -12,3 +12,23 @@ spec:
   selector:
     app: hook-delivery
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: merlin-hookdelivery-loadbalencer
+  namespace: merlin
+  annotations:
+    kubernetes.io/elb.id: f617cd20-79d1-4878-8184-fffa02717caf
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+spec:
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: hook-delivery
+  type: LoadBalancer

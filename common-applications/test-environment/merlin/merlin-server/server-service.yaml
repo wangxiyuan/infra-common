@@ -12,3 +12,23 @@ spec:
   selector:
     app: server
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: merlin-server-loadbalencer
+  namespace: merlin
+  annotations:
+    kubernetes.io/elb.id: 4e9747ba-dafb-4b15-96e0-c5867b45a886
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+spec:
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: server
+  type: LoadBalancer

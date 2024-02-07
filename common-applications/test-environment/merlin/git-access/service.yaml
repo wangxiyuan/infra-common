@@ -12,3 +12,23 @@ spec:
   selector:
     app: git-access
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: merlin-access-loadbalencer
+  namespace: merlin
+  annotations:
+    kubernetes.io/elb.id: d0a354b5-5f07-4394-9c84-080752a27afd
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+spec:
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: git-access
+  type: LoadBalancer
