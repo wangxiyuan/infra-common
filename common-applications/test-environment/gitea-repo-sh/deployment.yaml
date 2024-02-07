@@ -60,6 +60,7 @@ spec:
         imagePullPolicy: IfNotPresent
         args:
         - --config=/vault/secrets/app.ini
+        - --rm-cfg
         resources:
           requests:
             cpu: "6"

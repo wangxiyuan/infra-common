@@ -1,6 +1,7 @@
 resources:
 - namespace.yaml
 - sa.yaml
+- networkpolicy.yaml
 - merlin-server
 - merlin-website
 - merlin-docs

@@ -6,6 +6,7 @@ resources:
 - pvc.yaml
 - autoscaler.yaml
 - sa.yaml
+- networkpolicy.yaml
 commonAnnotations:
   kubernetes.ops.cluster: test
   kubernetes.ops.email: ""
