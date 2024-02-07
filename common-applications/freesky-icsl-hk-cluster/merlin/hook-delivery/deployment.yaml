@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hook-delivery
+  namespace: merlin-icsl
+spec:
+  selector:
+    matchLabels:
+      app: hook-delivery
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'merlin-icsl'
+        vault.hashicorp.com/agent-inject-secret-delivery.yaml: 'internal/data/icsl/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/icsl/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/icsl/merlin'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-delivery.yaml: "0400"
+        vault.hashicorp.com/agent-run-as-user: "5000"
+        vault.hashicorp.com/agent-run-as-group: "5000"
+        vault.hashicorp.com/agent-inject-template-delivery.yaml: |  
+          {{- with secret "internal/data/icsl/merlin" -}}  
+          {{ .Data.data.HookDelivery }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/icsl/merlin" -}}  
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/icsl/merlin" -}}  
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+      labels:
+        app: hook-delivery
+    spec:
+      tolerations:
+      - key: "icsl"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      serviceAccount: merlin-icsl
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/hook-delivery-test:main-06adf9
+        imagePullPolicy: IfNotPresent        
+        args:
+        - --port=8080
+        - --config-file=/vault/secrets/delivery.yaml
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: hook-delivery
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
