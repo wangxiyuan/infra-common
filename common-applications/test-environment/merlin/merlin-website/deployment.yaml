@@ -60,6 +60,32 @@ spec:
         - containerPort: 8080
           name: http
           protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8080
+            httpHeaders:
+            - name: "Host"
+              value: "modelfoundry.test.osinfra.cn"
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8080
+            httpHeaders:
+            - name: "Host"
+              value: "modelfoundry.test.osinfra.cn"
+          timeoutSeconds: 10
         resources:
           requests:
             cpu: 500m
@@ -67,22 +93,6 @@ spec:
           limits:
             cpu: 500m
             memory: 500Mi
-        readinessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 10
-          failureThreshold: 3
-          successThreshold: 1
-          periodSeconds: 10
-          timeoutSeconds: 5
-        livenessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-          timeoutSeconds: 5
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
