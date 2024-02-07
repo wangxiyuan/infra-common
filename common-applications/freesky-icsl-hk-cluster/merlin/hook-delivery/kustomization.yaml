@@ -10,3 +10,6 @@ namespace: merlin-icsl
 resources:
 - service.yaml
 - deployment.yaml
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/hook-delivery-test
+  newTag: main-32f967
