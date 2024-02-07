@@ -108,4 +108,4 @@ spec:
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: gitea-repo-data-volume
+          claimName: gitea-repo-data-encrypt-volume

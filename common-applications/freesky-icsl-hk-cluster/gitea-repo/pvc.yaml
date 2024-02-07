@@ -1,10 +1,10 @@
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  annotations:
-    everest.io/disk-volume-type: ssd
-  name: gitea-repo-data-volume
+  labels:
+    failure-domain.beta.kubernetes.io/region: cn-east-3
+    failure-domain.beta.kubernetes.io/zone: cn-east-3a
+  name: gitea-repo-data-encrypt-volume
   namespace: gitea-repo-icsl
 spec:
   accessModes:
