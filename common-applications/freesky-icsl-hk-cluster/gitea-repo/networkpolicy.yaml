@@ -1,0 +1,22 @@
+kind: NetworkPolicy
+metadata:
+  name: gitea-repo-policy-01
+  namespace: gitea-repo-icsl
+spec:
+  podSelector:
+    matchLabels:
+      app: gitea-repo-icsl
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 3000
+      from:
+        - podSelector:
+            matchLabels:
+              app: merlin-website
+          namespaceSelector:
+            matchLabels:
+              project: merlin-icsl
+  policyTypes:
+    - Ingress
+apiVersion: networking.k8s.io/v1

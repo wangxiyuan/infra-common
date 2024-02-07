@@ -13,4 +13,23 @@ spec:
     app: gitea-repo-icsl
   type: ClusterIP
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-repo-loadbalencer
+  namespace: gitea-repo
+  annotations:
+    kubernetes.io/elb.id: bc5ff7f9-167b-4341-bf3b-5eb4816052fb
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+spec:
+  ports:
+  - name: httpport
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+  selector:
+    app: gitea-repo-icsl
+  type: LoadBalancer
   

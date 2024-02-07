@@ -2,9 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: website-configmap
-  namespace: patchwork
+  namespace: merlin-icsl
 data:
-  repositories_branches_map.yaml: |
+  nginx.conf: |
     user $NGINX_USER;
 
     error_log /dev/stdout info;
@@ -48,8 +48,11 @@ data:
       proxy_hide_header X-Powered-By;
       proxy_request_buffering off;
 
+      set_real_ip_from 192.168.50.54;
+      real_ip_recursive on;
+      real_ip_header x_real_ip;
       limit_conn_zone $binary_remote_addr zone=limitperip:10m;
-      limit_req_zone $binary_remote_addr zone=ratelimit:10m rate=1000r/s;
+      limit_req_zone $binary_remote_addr zone=ratelimit:10m rate=200r/s;
 
       gzip on;
       gzip_min_length 1k;
@@ -68,7 +71,7 @@ data:
       }
       server {
         listen 8080 ssl default_server;
-        server_name modelfoundry.test.osinfra.cn;
+        server_name modelfoundry-icsl.test.osinfra.cn;
         charset utf-8;
 
         add_header X-XSS-Protection "1; mode=block";
@@ -113,7 +116,7 @@ data:
         #   return 404;
         # }
         location / {
-          limit_req zone=ratelimit burst=5 nodelay;
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header Host $host;
 
@@ -137,59 +140,75 @@ data:
 
 
         location ^~ /server/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_pass http://server-service.merlin-icsl.svc.cluster.local:8080/web/v1/;
+          proxy_ssl_verify	off;
+          proxy_pass https://server-service.merlin-icsl.svc.cluster.local:8080/web/v1/;
         }
 
         location ^~ /api/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_pass http://server-service.merlin-icsl.svc.cluster.local:8080/api/;
+          proxy_ssl_verify	off;
+          proxy_pass https://server-service.merlin-icsl.svc.cluster.local:8080/api/;
         }
 
         location ^~ /hook-delivery/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_pass http://hookdelivery-service.merlin-icsl.svc.cluster.local:8080/;
+          proxy_ssl_verify	off;
+          proxy_pass https://hookdelivery-service.merlin-icsl.svc.cluster.local:8080/;
         }
 
         location ^~ /api-file/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
+          proxy_ssl_verify	off;
           proxy_pass https://gitea-icsl.test.osinfra.cn/;
         }
 
         location ^~ /api-id/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
+          proxy_ssl_verify	off;
           proxy_pass https://modelfoundry-usercenter-icsl.test.osinfra.cn/;
         }
 
         location ^~ /api-dsapi/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
+          proxy_ssl_verify	off;
           proxy_pass https://dsapi.osinfra.cn/;
         }
 
         location ^~ /docs {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_pass http://merlin-docs-service.merlin-icsl.svc.cluster.local:8080;
+          proxy_ssl_verify	off;
+          proxy_pass https://merlin-docs-service.merlin-icsl.svc.cluster.local:8080;
         }
 
         location ^~ /coderepo/ {
+          limit_req zone=ratelimit burst=2 nodelay;
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_pass http://git-access-service.merlin-icsl.svc.cluster.local:8080/;
+          proxy_ssl_verify	off;
+          proxy_pass https://git-access-service.merlin-icsl.svc.cluster.local:8080/;
         }
 
         location ~ ^/(?<username>[^/]+)/(?<reponame>[^/]+)(\.git)?/(?<api>info/lfs/.+|info/refs|HEAD|git-upload-pack|git-receive-pack|objects/.+) {
@@ -198,22 +217,20 @@ data:
                 set $reponame_with_git $reponame.git;
             }
 
+            limit_req zone=ratelimit burst=2 nodelay;
             proxy_pass http://gitea-icsl/$username/$reponame_with_git/$api$is_args$args;
             proxy_set_header Host $host;
             proxy_set_header X-Forwarded-For $http_x_real_ip;
             proxy_http_version 1.1;
             proxy_set_header Connection "";
+            proxy_ssl_verify	off;
         }
 
-        # error_page 401 402 403 405 406 407 413 414 /error.html;
-        # error_page 404 /404.html;
-        # error_page 500 501 502 503 504 505 /error.html;
+        error_page 401 402 403 405 406 407 413 414 /error.html;
+        error_page 500 501 502 503 504 505 /error.html;
 
-        # location = /404.html {
-        #   root /usr/share/nginx/www;
-        # }
-        # location = /error.html {
-        #   root /usr/share/nginx/www;
-        # }
+        location = /error.html {
+          root /usr/share/nginx/www;
+        }
       }
     }
