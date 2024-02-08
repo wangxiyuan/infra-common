@@ -65,6 +65,7 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 30
         securityContext:
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: Unconfined
           runAsUser: 1000
@@ -123,12 +124,15 @@ spec:
             name: data-volume
           - mountPath: /tmp/
             name: tmp-volume
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
       volumes:
       - name: buildkitd
         emptyDir: {}
       - name: data-volume
         persistentVolumeClaim:
-          claimName: space-log-volume
+          claimName: space-log-encrypt-volume
       - name: tmp-volume
         persistentVolumeClaim:
-          claimName: space-data-volume
+          claimName: space-data-encrypt-volume
