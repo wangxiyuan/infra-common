@@ -65,7 +65,6 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 30
         securityContext:
-          allowPrivilegeEscalation: false
           seccompProfile:
             type: Unconfined
           runAsUser: 1000
