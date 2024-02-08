@@ -222,6 +222,8 @@ data:
             proxy_http_version 1.1;
             proxy_set_header Connection "";
             proxy_ssl_verify	off;
+            proxy_buffering off;
+            proxy_request_buffering off;
         }
 
         error_page 401 402 403 405 406 407 413 414 /error.html;
