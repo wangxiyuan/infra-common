@@ -11,4 +11,4 @@ resources:
 - deployment.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-label-test
-  newTag: fix_payload-4d699c
+  newTag: fix_payload-168521
