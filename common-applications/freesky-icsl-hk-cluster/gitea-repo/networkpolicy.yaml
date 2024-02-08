@@ -17,6 +17,12 @@ spec:
           namespaceSelector:
             matchLabels:
               project: merlin-icsl
+        - podSelector:
+            matchLabels:
+              app: server
+          namespaceSelector:
+            matchLabels:
+              project: merlin-icsl
   policyTypes:
     - Ingress
 apiVersion: networking.k8s.io/v1
