@@ -169,7 +169,7 @@ data:
           proxy_http_version 1.1;
           proxy_set_header Connection "";
           proxy_ssl_verify	off;
-          proxy_pass https://gitea-icsl.test.osinfra.cn/;
+          proxy_pass https://gitea/;
         }
 
         location ^~ /api-id/ {
