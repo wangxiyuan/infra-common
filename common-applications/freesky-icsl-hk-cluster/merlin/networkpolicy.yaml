@@ -42,27 +42,6 @@ apiVersion: networking.k8s.io/v1
 ---
 kind: NetworkPolicy
 metadata:
-  name: merlin-space-policy-01
-  namespace: merlin-icsl
-spec:
-  podSelector:
-    matchLabels:
-      app: space
-  ingress:
-    - ports:
-        - protocol: TCP
-          port: 8123
-      from:
-        - podSelector:
-            matchLabels:
-              app: space
-  policyTypes:
-    - Ingress
-apiVersion: networking.k8s.io/v1
-
----
-kind: NetworkPolicy
-metadata:
   name: merlin-hook-policy-01
   namespace: merlin-icsl
 spec:
