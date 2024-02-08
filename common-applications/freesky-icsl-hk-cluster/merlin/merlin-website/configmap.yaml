@@ -75,7 +75,7 @@ data:
         add_header X-Frame-Options DENY;
         add_header X-Content-Type-Options nosniff;
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-        add_header Content-Security-Policy "script-src 'self' *.baidu.com 'unsafe-inline' 'unsafe-eval'; object-src 'none'; frame-src 'none'";
+        add_header Content-Security-Policy "script-src 'self' *.baidu.com 'unsafe-inline' 'unsafe-eval'; object-src 'none'; frame-src https://cci.test.osinfra.cn:*";
         add_header Cache-Control "no-cache,no-store,must-revalidate";
         add_header Pragma no-cache;
         add_header Expires 0;
