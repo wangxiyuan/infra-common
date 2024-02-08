@@ -63,6 +63,30 @@ apiVersion: networking.k8s.io/v1
 ---
 kind: NetworkPolicy
 metadata:
+  name: merlin-hook-policy-02
+  namespace: merlin-icsl
+spec:
+  podSelector:
+    matchLabels:
+      app: hook-delivery
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+      from:
+        - podSelector:
+            matchLabels:
+              app: gitea-repo-icsl
+          namespaceSelector:
+            matchLabels:
+              project: gitea-repo-icsl
+  policyTypes:
+    - Ingress
+apiVersion: networking.k8s.io/v1
+
+---
+kind: NetworkPolicy
+metadata:
   name: merlin-label-policy-01
   namespace: merlin-icsl
 spec:
