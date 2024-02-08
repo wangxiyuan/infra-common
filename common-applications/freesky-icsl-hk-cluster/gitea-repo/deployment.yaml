@@ -99,7 +99,12 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/gitea/
           name: data-volume
+        - mountPath: /tmp/
+          name: tmp-gitea-data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: gitea-repo-data-encrypt-volume
+      - name: tmp-gitea-data-volume
+        persistentVolumeClaim:
+          claimName: tmp-gitea-data-encrypt-volume

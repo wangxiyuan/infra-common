@@ -14,3 +14,21 @@ spec:
       storage: 100Gi
   storageClassName: csi-disk
   volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    failure-domain.beta.kubernetes.io/region: cn-east-3
+    failure-domain.beta.kubernetes.io/zone: cn-east-3a
+  name: tmp-gitea-data-encrypt-volume
+  namespace: gitea-repo-icsl
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: csi-disk
+  volumeMode: Filesystem
