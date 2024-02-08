@@ -54,11 +54,11 @@ spec:
       - name: huawei-swr-image-pull-secret
       containers:
       - name: merlin-docs
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-docs-test:new
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-docs-test:main-c58942
         imagePullPolicy: IfNotPresent
         env:
         - name: DET_URL
-          value: https://modelfoundry-icsl-docs.test.osinfra.cn
+          value: https://modelfoundry-icsl.test.osinfra.cn/docs/
         ports:
         - containerPort: 8080
           name: http
@@ -70,11 +70,8 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundry-icsl-docs.test.osinfra.cn"
           timeoutSeconds: 10
         livenessProbe:
           failureThreshold: 3
@@ -83,11 +80,8 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundry-icsl-docs.test.osinfra.cn"
           timeoutSeconds: 10
         resources:
           requests:
