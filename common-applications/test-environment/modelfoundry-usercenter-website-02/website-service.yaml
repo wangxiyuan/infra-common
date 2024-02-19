@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+  namespace: modelfoundry-usercenter-website-02
+spec:
+  ports:
+  - name: http-port
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: website
+  type: ClusterIP
