@@ -55,7 +55,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              app: hook-delivery
+              app: merlin-website
   policyTypes:
     - Ingress
 apiVersion: networking.k8s.io/v1
@@ -142,6 +142,45 @@ spec:
         - podSelector:
             matchLabels:
               app: merlin-website
+  policyTypes:
+    - Ingress
+apiVersion: networking.k8s.io/v1
+
+---
+kind: NetworkPolicy
+metadata:
+  name: merlin-server-policy-02
+  namespace: merlin-02
+spec:
+  podSelector:
+    matchLabels:
+      app: server
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+      from:
+        - podSelector:
+            matchLabels:
+              app: label
+  policyTypes:
+    - Ingress
+apiVersion: networking.k8s.io/v1
+
+---
+kind: NetworkPolicy
+metadata:
+  name: merlin-server-policy-03
+  namespace: merlin-02
+spec:
+  podSelector:
+    matchLabels:
+      app: server
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+      from:
         - podSelector:
             matchLabels:
               app: space
@@ -149,6 +188,26 @@ spec:
     - Ingress
 apiVersion: networking.k8s.io/v1
 
+---
+kind: NetworkPolicy
+metadata:
+  name: merlin-server-policy-04
+  namespace: merlin-02
+spec:
+  podSelector:
+    matchLabels:
+      app: server
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+      from:
+        - podSelector:
+            matchLabels:
+              app: git-access
+  policyTypes:
+    - Ingress
+apiVersion: networking.k8s.io/v1
 
 
 
