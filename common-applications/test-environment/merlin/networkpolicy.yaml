@@ -76,7 +76,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              app: hook-delivery
+              app: merlin-website
   policyTypes:
     - Ingress
 apiVersion: networking.k8s.io/v1
@@ -162,7 +162,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              app: server
+              app: merlin-website
   policyTypes:
     - Ingress
 apiVersion: networking.k8s.io/v1
