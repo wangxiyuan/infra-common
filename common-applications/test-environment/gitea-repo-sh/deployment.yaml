@@ -77,9 +77,6 @@ spec:
             scheme: HTTPS
             path: /
             port: 3000
-            httpHeaders:
-            - name: "Host"
-              value: "gitea.test.osinfra.cn"
           timeoutSeconds: 10
         livenessProbe:
           failureThreshold: 3
@@ -90,9 +87,6 @@ spec:
             scheme: HTTPS
             path: /
             port: 3000
-            httpHeaders:
-            - name: "Host"
-              value: "gitea.test.osinfra.cn"
           timeoutSeconds: 10
         securityContext:
           allowPrivilegeEscalation: false

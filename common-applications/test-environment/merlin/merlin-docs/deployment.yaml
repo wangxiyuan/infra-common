@@ -53,7 +53,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: DET_URL
-          value: https://modelfoundry-docs.test.osinfra.cn
+          value: https://modelfoundry-docs.test.osinfra.cn/docs/
         ports:
         - containerPort: 8080
           name: http
@@ -65,11 +65,8 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundry-docs.test.osinfra.cn"
           timeoutSeconds: 10
         livenessProbe:
           failureThreshold: 3
@@ -78,11 +75,8 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundry-docs.test.osinfra.cn"
           timeoutSeconds: 10
         resources:
           requests:

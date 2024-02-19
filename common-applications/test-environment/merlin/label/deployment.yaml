@@ -60,6 +60,7 @@ spec:
         imagePullPolicy: IfNotPresent        
         args:
         - --config-file=/vault/secrets/label.yml
+        - --rm-cfg=false
         name: server
         resources:
           limits:
