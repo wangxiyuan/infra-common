@@ -2,18 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: merlin-website
+  name: merlin-docs
   namespace: merlin-02
-  labels: 
-    app: merlin-website
 spec:
   selector:
     matchLabels:
-      app: merlin-website
+      app: merlin-docs
   template:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: merlin-sh
         vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-inject-perms-abc.txt: "0400"
@@ -41,21 +41,19 @@ spec:
           {{- with secret "internal/data/infra-test/merlin-sh" -}}
           {{ .Data.data.dhparamPem }}
           {{- end }}
-        vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/role: merlin-sh
       labels:
-        app: merlin-website
+        app: merlin-docs
     spec:
+      serviceAccount: merlin
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
-      serviceAccount: merlin
       containers:
-      - name: websitepod
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-website-test:main-e2cc12
+      - name: merlin-docs
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-docs-test:main-c58942
         imagePullPolicy: IfNotPresent
         env:
         - name: DET_URL
-          value: https://modelfoundrysh.test.osinfra.cn
+          value: https://modelfoundrysh.test.osinfra.cn/docs/
         ports:
         - containerPort: 8080
           name: http
@@ -67,11 +65,8 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundrysh.test.osinfra.cn"
           timeoutSeconds: 10
         livenessProbe:
           failureThreshold: 3
@@ -80,29 +75,16 @@ spec:
           successThreshold: 1
           httpGet:
             scheme: HTTPS
-            path: /
+            path: /index.html
             port: 8080
-            httpHeaders:
-            - name: "Host"
-              value: "modelfoundrysh.test.osinfra.cn"
           timeoutSeconds: 10
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 500m
+            memory: 500Mi
           limits:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 500m
+            memory: 500Mi
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
-        volumeMounts:
-        - name: website-configmap
-          mountPath: /etc/nginx/nginx.conf
-          subPath: nginx.conf
-      volumes:
-        - configMap:
-            defaultMode: 420
-            name: website-configmap
-          name: website-configmap
-
