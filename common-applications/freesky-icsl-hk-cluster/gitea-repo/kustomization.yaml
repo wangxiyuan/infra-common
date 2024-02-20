@@ -1,0 +1,20 @@
+resources:
+- deployment.yaml
+- namespace.yaml
+- service.yaml
+- tls.yaml
+- pvc.yaml
+- sa.yaml
+- networkpolicy.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: test
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: debian
+  kubernetes.ops.owner: georgecao
+  kubernetes.ops.region: hk
+namespace: gitea-repo-icsl
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build
+  newTag: v1.0.20240219155401

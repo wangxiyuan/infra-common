@@ -13,6 +13,6 @@ commonAnnotations:
 namespace: jenkins
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/openeuler/bak-jenkins
-  newTag: 2617e02f98705c95e34e3d53bbbba80e01009670
+  newTag: fc7cbd36549e0ff0f6f019916a1972ec09c52044
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

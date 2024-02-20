@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: om-webserver
+  namespace: om-webserver-test-icsl
+  labels:
+    app: om-webserver
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: om-webserver
+  template:
+    metadata:
+      labels:
+        app: om-webserver
+    spec:
+      tolerations:
+      - key: "icsl"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+        - name: om-webserver
+          image: swr.cn-north-4.myhuaweicloud.com/om/om-webserver-test:test-pwd-8a3648
+          env:
+          - name: APPLICATION_PATH
+            value: "/var/lib/om-webserver/application.properties"
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2000Mi
+            requests:
+              cpu: 500m
+              memory: 1000Mi
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 8080
+              name: om-webserver
+          volumeMounts:
+            - mountPath: /var/lib/om-webserver/application.properties
+              subPath: application_properties
+              name: om-webserver-secrets-volume
+      volumes:
+        - name: om-webserver-secrets-volume
+          secret:
+            secretName: om-webserver-secrets

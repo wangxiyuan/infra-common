@@ -6,6 +6,8 @@ metadata:
   namespace: sca
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: sca-dm
@@ -69,10 +71,15 @@ spec:
         - mountPath: /standby/standby.ks
           name: secret-volume
           subPath: standby_ks
+        - mountPath: /opt/app/sca/log/sca-utralsca-dm-service-gc/dump
+          name: log-volume
       volumes:
       - name: secret-volume
         secret:
           secretName: sca-secret
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: pvc-dm
 
 ---
 # Service
@@ -92,3 +99,22 @@ spec:
       targetPort: 7979
   selector:
     app: sca-dm
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-dm
+  namespace: sca
+  annotations:
+    everest.io/disk-volume-type: SAS
+  labels:
+    failure-domain.beta.kubernetes.io/region: ap-southeast-1
+    failure-domain.beta.kubernetes.io/zone: ap-southeast-1a
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: csi-disk-sas

@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: jenkins-backup-secret
                   key: bak_domain
+            - name: repo_name
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: repo-name
             ports:
             - containerPort: 80
               name: http
