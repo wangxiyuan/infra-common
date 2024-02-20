@@ -18,7 +18,6 @@ spec:
         vault.hashicorp.com/role: 'merlin'
         vault.hashicorp.com/agent-inject-secret-compose-config.yml: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-redis.crt: 'internal/data/infra-test/merlin'
-        vault.hashicorp.com/agent-inject-secret-mongodb.crt: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-pqsql.crt: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/merlin'
@@ -26,7 +25,6 @@ spec:
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-compose-config.yml: "0400"
         vault.hashicorp.com/agent-inject-perms-redis.crt: "0400"
-        vault.hashicorp.com/agent-inject-perms-mongodb.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-pqsql.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.key: "0400"
@@ -40,10 +38,6 @@ spec:
         vault.hashicorp.com/agent-inject-template-redis.crt: |  
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.redisCA }}
-          {{- end }}
-        vault.hashicorp.com/agent-inject-template-mongodb.crt: |  
-          {{- with secret "internal/data/infra-test/merlin" -}}  
-          {{ .Data.data.mongodb }}
           {{- end }}
         vault.hashicorp.com/agent-inject-template-pqsql.crt: |  
           {{- with secret "internal/data/infra-test/merlin" -}}  
