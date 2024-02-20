@@ -1,0 +1,68 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: api-gateway
+  namespace: openeuler-devops
+  labels:
+    name: api-gateway
+spec:
+  selector:
+    matchLabels:
+      name: api-gateway
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: openeuler-devops
+        vault.hashicorp.com/agent-run-as-user: "998"
+        vault.hashicorp.com/agent-run-as-group: "998"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/secret-volume-path: "/etc/nginx/cert/"
+        vault.hashicorp.com/agent-inject-secret-server.crt: "internal/data/infra-test/openeuler-devops"
+        vault.hashicorp.com/agent-inject-template-server.crt: |
+          {{- with secret "internal/data/infra-test/openeuler-devops" -}}
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.key: "internal/data/infra-test/openeuler-devops"
+        vault.hashicorp.com/agent-inject-template-server.key: |
+          {{- with secret "internal/data/infra-test/openeuler-devops" -}}
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+      labels:
+        name: api-gateway
+    spec:
+      serviceAccount: openeuler-devops
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: api-gateway
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/api-gateway:master-d3d5b2
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        
+      
+

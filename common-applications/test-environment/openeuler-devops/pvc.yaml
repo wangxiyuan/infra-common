@@ -164,7 +164,7 @@ kind: PersistentVolumeClaim
 metadata:
   annotations:
     everest.io/disk-volume-type: ssd
-  name: workflow-schedule-data-volume
+  name: chronos-scheduler-data-volume
   namespace: openeuler-devops
 spec:
   accessModes:

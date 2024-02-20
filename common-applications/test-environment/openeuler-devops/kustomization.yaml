@@ -2,6 +2,8 @@ resources:
 - namespace.yaml
 - pvc.yaml
 - sa.yaml
+- api-gateway
+- chronos-scheduler
 - workflow-manager
 - workflow-runner
 - event-selector
@@ -12,8 +14,6 @@ resources:
 - exec-watcher
 - exec-updator
 - workflow-webhook
-- workflow-schedule
-- website
 - etcd-own
 - kibana
 - pods-monitor

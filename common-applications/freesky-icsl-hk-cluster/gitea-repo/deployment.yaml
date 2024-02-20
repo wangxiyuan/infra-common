@@ -1,0 +1,110 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea-repo-deployment
+  namespace: gitea-repo-icsl
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gitea-repo-icsl
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'gitea-repo-icsl'
+        vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/icsl/gitea-repo'
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/icsl/merlin'
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/icsl/merlin'
+        vault.hashicorp.com/agent-inject-secret-mysql.crt: 'internal/data/icsl/gitea-repo'
+        vault.hashicorp.com/agent-inject-secret-kafka.crt: 'internal/data/icsl/gitea-repo'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-app.ini: "0600"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-mysql.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-kafka.crt: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-template-app.ini: |  
+          {{- with secret "internal/data/icsl/gitea-repo" -}}  
+          {{ .Data.data.app }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/icsl/merlin" -}}  
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/icsl/merlin" -}}  
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-mysql.crt: |  
+          {{- with secret "internal/data/icsl/gitea-repo" -}}  
+          {{ .Data.data.MysqlCert }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-kafka.crt: |  
+          {{- with secret "internal/data/icsl/gitea-repo" -}}  
+          {{ .Data.data.kafkaCA }}
+          {{- end }}
+      labels:
+        app: gitea-repo-icsl
+    spec:
+      tolerations:
+      - key: "icsl"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      serviceAccount: gitea-repo-icsl
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: gitea-build
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:new
+        imagePullPolicy: IfNotPresent
+        args:
+        - --config=/vault/secrets/app.ini
+        - --rm-cfg
+        resources:
+          requests:
+            cpu: "6"
+            memory: 10000Mi
+          limits:
+            cpu: "6"
+            memory: 10000Mi
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 3000
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 3000
+          timeoutSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+        volumeMounts:
+        - mountPath: /var/lib/gitea/
+          name: data-volume
+        - mountPath: /tmp/
+          name: tmp-gitea-data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: gitea-repo-data-encrypt-volume
+      - name: tmp-gitea-data-volume
+        persistentVolumeClaim:
+          claimName: tmp-gitea-data-encrypt-volume

@@ -16,28 +16,51 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'gitea-repo-sh'
         vault.hashicorp.com/agent-inject-secret-app.ini: 'internal/data/infra-test/gitea-repo-sh'
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-inject-secret-mysql.crt: 'internal/data/infra-test/gitea-repo-sh'
+        vault.hashicorp.com/agent-inject-secret-kafka.crt: 'internal/data/infra-test/gitea-repo-sh'
         vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/agent-inject-perms-app.ini: "0400"
+        vault.hashicorp.com/agent-inject-perms-app.ini: "0600"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-mysql.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-kafka.crt: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
         vault.hashicorp.com/agent-inject-template-app.ini: |  
           {{- with secret "internal/data/infra-test/gitea-repo-sh" -}}  
           {{ .Data.data.app }}
           {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-mysql.crt: |  
+          {{- with secret "internal/data/infra-test/gitea-repo-sh" -}}  
+          {{ .Data.data.MysqlCert }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-kafka.crt: |  
+          {{- with secret "internal/data/infra-test/gitea-repo-sh" -}}  
+          {{ .Data.data.kafkaCA }}
+          {{- end }}
       labels:
         app: gitea-repo-sh
     spec:
-      serviceAccount: gitea-repo
+      serviceAccount: gitea-repo-sh
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
-      nodeSelector:
-        autoscaler: "true"
       containers:
       - name: gitea-build
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:6b8591254cd6577c4114dc4140b79453515a6848811a1bfcc52519c6131a4f7a
         imagePullPolicy: IfNotPresent
         args:
         - --config=/vault/secrets/app.ini
+        - --rm-cfg
         resources:
           requests:
             cpu: "6"
@@ -45,22 +68,29 @@ spec:
           limits:
             cpu: "6"
             memory: 10000Mi
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 3000
-          timeoutSeconds: 5
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 3000
-          timeoutSeconds: 5
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 3000
+          timeoutSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
         volumeMounts:
         - mountPath: /var/lib/gitea/
           name: data-volume

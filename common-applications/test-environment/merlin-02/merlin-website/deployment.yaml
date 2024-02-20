@@ -17,7 +17,7 @@ spec:
         vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-inject-perms-abc.txt: "0400"
-        vault.hashicorp.com/agent-inject-perms-dhparam.pem: "0600"
+        vault.hashicorp.com/agent-inject-perms-dhparam.pem: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
         vault.hashicorp.com/secret-volume-path: "/etc/nginx/cert/"
@@ -60,13 +60,6 @@ spec:
         - containerPort: 8080
           name: http
           protocol: TCP
-        resources:
-          requests:
-            cpu: 500m
-            memory: 500Mi
-          limits:
-            cpu: 500m
-            memory: 500Mi
         readinessProbe:
           failureThreshold: 3
           initialDelaySeconds: 30
@@ -93,3 +86,23 @@ spec:
             - name: "Host"
               value: "modelfoundrysh.test.osinfra.cn"
           timeoutSeconds: 10
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+        volumeMounts:
+        - name: website-configmap
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: website-configmap
+          name: website-configmap
+

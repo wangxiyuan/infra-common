@@ -13,4 +13,5 @@ spec:
     app: gitea-repo
   type: ClusterIP
 
+
   

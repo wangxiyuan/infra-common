@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - autogpt.test.osinfra.cn
+      - autogpt.osinfra.cn
       secretName: autogpt-reverse-tls
   rules:
-    - host: autogpt.test.osinfra.cn
+    - host: autogpt.osinfra.cn
       http:
         paths:
         - backend:

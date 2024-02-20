@@ -1,0 +1,15 @@
+resources:
+- deployment.yaml
+- service.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: test
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: openeuler
+  kubernetes.ops.owner: zhangyizheng
+  kubernetes.ops.region: shanghai
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openeuler-devops
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/api-gateway
+  newTag: master-d3d5b2
