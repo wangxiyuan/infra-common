@@ -12,3 +12,6 @@ resources:
 - deployment.yaml
 - autoscaler.yaml
 - pvc.yaml
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-space-test
+  newTag: release-3a7a87
