@@ -10,7 +10,6 @@ spec:
   strategy:
     rollingUpdate:
       maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -89,8 +88,6 @@ spec:
       - name: space 
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-space-test:main-5a3d7e
         imagePullPolicy: IfNotPresent
-        args:
-        - --enable_debug=true
         env:
         - name: CONFIG_FILE
           value: /vault/secrets/compose-config.yml
@@ -103,7 +100,7 @@ spec:
         - name: REMOVE_CONFIG
           value: "true"
         - name: ENABLE_DEBUG
-          value: "false"
+          value: "true"
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
