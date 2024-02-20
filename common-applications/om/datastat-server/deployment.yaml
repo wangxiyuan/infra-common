@@ -63,6 +63,9 @@ spec:
             - mountPath: /var/lib/ds/application.properties
               subPath: application_properties
               name: datastat-server-secrets-volume
+            - mountPath: /var/lib/ds/foundry.properties
+              subPath: foundry_properties
+              name: datastat-server-secrets-volume
       volumes:
         - name: datastat-server-secrets-volume
           secret:
