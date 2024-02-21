@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: easysoftware-ingress
+  namespace: easysoftware
+spec:
+  tls:
+    - hosts:
+        - easysoftware-api.test.osinfra.cn
+      secretName: test-osinfra-cn-tls
+  rules:
+  - host: easysoftware-api.test.osinfra.cn
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: easysoftware-service
+            port:
+              number: 8080
+  ingressClassName: nginx
