@@ -182,7 +182,7 @@ data:
           proxy_set_header X-Forwarded-For $http_x_real_ip;
           proxy_http_version 1.1;
           proxy_set_header Connection "";
-          proxy_ssl_protocols TLSv1.3;
+          proxy_ssl_protocols TLSv1.2;
           proxy_ssl_verify	off;
           proxy_pass https://gitea/;
         }
@@ -233,7 +233,7 @@ data:
 
             limit_req zone=ratelimit burst=2 nodelay;
             limit_rate 1m;
-            proxy_ssl_protocols TLSv1.3;
+            proxy_ssl_protocols TLSv1.2;
             proxy_pass https://gitea/$username/$reponame_with_git/$api$is_args$args;
             proxy_set_header Host $host;
             proxy_set_header X-Forwarded-For $http_x_real_ip;
