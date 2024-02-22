@@ -51,6 +51,8 @@ spec:
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
+      nodeSelector:
+        icsl: "true"
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
       serviceAccount: merlin-icsl
