@@ -57,9 +57,8 @@ spec:
       - name: huawei-swr-image-pull-secret
       containers:
       - name: buildkitd
-        image: moby/buildkit:master-rootless
+        image: moby/buildkit:master
         args:
-          - --oci-worker-no-process-sandbox
           - --addr=tcp://0.0.0.0:1234
         # readinessProbe:
         #   exec:
@@ -78,10 +77,7 @@ spec:
         #   initialDelaySeconds: 5
         #   periodSeconds: 30
         securityContext:
-          seccompProfile:
-            type: Unconfined
-          runAsUser: 1000
-          runAsGroup: 1000
+          privileged: true
         resources:
           limits:
             cpu: "8"
