@@ -1,0 +1,10 @@
+resources:
+- deployment.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: modelfoundry-guiyang-npu-containerd-cluster
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: "Alpine"
+  kubernetes.ops.owner: liuyang
+  kubernetes.ops.region: guiyang
+namespace: kube-system
+
