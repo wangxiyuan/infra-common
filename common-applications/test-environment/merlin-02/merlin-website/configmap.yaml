@@ -46,7 +46,6 @@ data:
       send_timeout 60;
 
       proxy_hide_header X-Powered-By;
-      proxy_request_buffering off;
 
       limit_conn_zone $binary_remote_addr zone=limitperip:10m;
       limit_req_zone $binary_remote_addr zone=frontendratelimit:10m rate=1000r/s;
