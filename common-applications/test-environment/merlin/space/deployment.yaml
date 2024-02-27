@@ -21,12 +21,14 @@ spec:
         vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-cci-config.yml: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-inject-secret-kafka.crt: 'internal/data/infra-test/merlin'
+        vault.hashicorp.com/agent-inject-secret-docker.json: 'internal/data/infra-test/merlin'
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-compose-config.yml: "0400"
         vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-inject-perms-cci-config.yml: "0400"
         vault.hashicorp.com/agent-inject-perms-kafka.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-docker.json: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
         vault.hashicorp.com/agent-inject-template-compose-config.yml: |  
@@ -49,6 +51,9 @@ spec:
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.kafkaCA }}
           {{- end }}
+        vault.hashicorp.com/agent-inject-template-docker.json: |  
+          {{- with secret "internal/data/infra-test/merlin" -}}  
+          {{ .Data.data.spaceSwrLogin }}
       labels:
         app: space
     spec:
