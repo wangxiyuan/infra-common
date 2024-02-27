@@ -43,6 +43,9 @@ spec:
       serviceAccount: merlin
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/hook-delivery-test:main-06adf9
         imagePullPolicy: IfNotPresent        

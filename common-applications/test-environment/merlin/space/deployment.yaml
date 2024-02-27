@@ -61,6 +61,9 @@ spec:
       serviceAccount: merlin
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: buildkitd
         image: moby/buildkit:master
