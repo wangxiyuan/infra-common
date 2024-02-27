@@ -48,7 +48,7 @@ data:
       proxy_hide_header X-Powered-By;
 
       limit_conn_zone $binary_remote_addr zone=limitperip:10m;
-      limit_req_zone $binary_remote_addr zone=frontendratelimit:10m rate=1000r/s;
+      limit_req_zone $binary_remote_addr zone=frontendratelimit:10m rate=1500r/s;
       limit_req_zone $binary_remote_addr zone=ratelimit:10m rate=200r/s;
 
       gzip on;
