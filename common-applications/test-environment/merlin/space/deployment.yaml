@@ -54,6 +54,7 @@ spec:
         vault.hashicorp.com/agent-inject-template-docker.json: |  
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.spaceSwrLogin }}
+          {{- end }}
       labels:
         app: space
     spec:
