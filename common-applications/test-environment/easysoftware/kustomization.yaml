@@ -1,19 +1,10 @@
 resources:
-- deployment.yaml
-- ingress.yaml
-- service.yaml
 - namespace.yaml
-- secrets.yaml
 - sa.yaml
+- secret.yaml
+- server
+- website
+# - monitoring
 namespace: easysoftware
 apiVersion: kustomize.config.k8s.io/v1beta1
-commonAnnotations:
-  kubernetes.ops.cluster: shanghai-test-cluster
-  kubernetes.ops.email: ""
-  kubernetes.ops.os.base: debian
-  kubernetes.ops.owner: wucaiping
-  kubernetes.ops.region: shanghai
 kind: Kustomization
-images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/easysoftware/easysoftware-test
-  newTag: master-dacf00

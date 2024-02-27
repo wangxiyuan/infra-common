@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: easysoftware
+  name: easysoftware-server-deployment
   namespace: easysoftware
   labels:
     app: easysoftware
