@@ -13,4 +13,4 @@ resources:
 - autoscaler.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/easysoftware/easysoftware-website-test
-  newTag: master-20e658
+  newTag: master-ba55bb
