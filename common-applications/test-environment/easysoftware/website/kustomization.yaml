@@ -8,7 +8,6 @@ commonAnnotations:
 kind: Kustomization
 namespace: easysoftware
 resources:
-- ingress.yaml
 - service.yaml
 - deployment.yaml
 - autoscaler.yaml
