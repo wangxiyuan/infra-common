@@ -42,7 +42,7 @@ data:
       client_header_timeout 60;
       client_body_timeout 60;
       client_body_in_file_only off;
-      keepalive_timeout 300;
+      keepalive_timeout 900;
       send_timeout 60;
 
       proxy_hide_header X-Powered-By;
@@ -143,6 +143,10 @@ data:
           proxy_set_header Connection "";
           proxy_ssl_verify	off;
           proxy_ssl_protocols TLSv1.3;
+          proxy_buffering off;
+          proxy_cache off;
+          proxy_buffer_size 8k;
+          proxy_read_timeout 900;
           proxy_pass https://server-service.merlin.svc.cluster.local:8080/web/v1/;
         }
 
