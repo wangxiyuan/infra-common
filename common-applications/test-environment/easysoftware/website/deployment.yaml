@@ -54,23 +54,36 @@ spec:
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/easysoftware/easysoftware-website-test:master-50b75c
         imagePullPolicy: IfNotPresent
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 20
-          periodSeconds: 20
-          successThreshold: 1
-          tcpSocket:
-            port: 8080
-          timeoutSeconds: 5
-        name: website
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 8080
-          timeoutSeconds: 5
+            httpHeaders:
+            - name: "Host"
+              value: "easysoftware.test.osinfra.cn"
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8080
+            httpHeaders:
+            - name: "Host"
+              value: "easysoftware.test.osinfra.cn"
+          timeoutSeconds: 10
         resources:
           limits:
             cpu: 500m
