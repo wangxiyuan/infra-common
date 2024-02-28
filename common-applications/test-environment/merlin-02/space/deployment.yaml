@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: space-deployment
+  namespace: merlin-02
+spec:
+  selector:
+    matchLabels:
+      app: space
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'merlin-sh'
+        vault.hashicorp.com/agent-inject-containers: 'space'
+        vault.hashicorp.com/agent-inject-secret-compose-config.yml: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-inject-secret-cci-config.yml: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-inject-secret-kafka.crt: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-inject-secret-docker.json: 'internal/data/infra-test/merlin-sh'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-compose-config.yml: "0400"
+        vault.hashicorp.com/agent-inject-perms-cci-config.yml: "0400"
+        vault.hashicorp.com/agent-inject-perms-kafka.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-docker.json: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-template-compose-config.yml: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.spaceConf }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-cci-config.yml: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.cciConf }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-kafka.crt: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.kafkaCA }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-docker.json: |  
+          {{- with secret "internal/data/infra-test/merlin-sh" -}}  
+          {{ .Data.data.spaceSwrLogin }}
+          {{- end }}
+      labels:
+        app: space
+    spec:
+      serviceAccount: merlin
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: buildkitd
+        image: moby/buildkit:master
+        args:
+          - --addr=tcp://0.0.0.0:1234
+        # readinessProbe:
+        #   exec:
+        #     command:
+        #       - buildctl
+        #       - debug
+        #       - workers
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 30
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #       - buildctl
+        #       - debug
+        #       - workers
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 30
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            cpu: "8"
+            memory: 16Gi
+          requests:
+            cpu: "8"
+            memory: 16Gi
+        volumeMounts:
+          - mountPath: /home/user/.local/share/buildkit
+            name: buildkitd
+      - name: space 
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-space-test:main-5a3d7e
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: CONFIG_FILE
+          value: /vault/secrets/compose-config.yml
+        - name: LOG_PATH
+          value: /var/log/space-server.log
+        - name: IP
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8123"
+        - name: REMOVE_CONFIG
+          value: "false"
+        - name: ENABLE_DEBUG
+          value: "true"
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8123
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8123
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "4"
+            memory: 8Gi
+          requests:
+            cpu: "2"
+            memory: 2Gi 
+        volumeMounts:
+          - mountPath: /var/log/
+            name: data-volume
+          - mountPath: /tmp/
+            name: tmp-volume
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+      volumes:
+      - name: buildkitd
+        emptyDir: {}
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: space-log-volume
+      - name: tmp-volume
+        persistentVolumeClaim:
+          claimName: space-data-volume
