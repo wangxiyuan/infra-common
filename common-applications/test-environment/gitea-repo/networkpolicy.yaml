@@ -1,6 +1,6 @@
 kind: NetworkPolicy
 metadata:
-  name: gitea-repo-policy-01
+  name: gitea-repo-sh-policy-01
   namespace: gitea-repo-sh
 spec:
   podSelector:
@@ -24,7 +24,7 @@ apiVersion: networking.k8s.io/v1
 ---
 kind: NetworkPolicy
 metadata:
-  name: gitea-repo-policy-02
+  name: gitea-repo-sh-policy-02
   namespace: gitea-repo-sh
 spec:
   podSelector:
@@ -48,7 +48,7 @@ apiVersion: networking.k8s.io/v1
 ---
 kind: NetworkPolicy
 metadata:
-  name: gitea-repo-policy-03
+  name: gitea-repo-sh-policy-03
   namespace: gitea-repo-sh
 spec:
   podSelector:
@@ -72,7 +72,7 @@ apiVersion: networking.k8s.io/v1
 ---
 kind: NetworkPolicy
 metadata:
-  name: gitea-repo-policy-04
+  name: gitea-repo-sh-policy-04
   namespace: gitea-repo-sh
 spec:
   podSelector:
