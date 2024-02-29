@@ -17,8 +17,8 @@ spec:
       - name: huawei-swr-image-pull-secret
       containers:
         - name: datastat-server
-          image: swr.cn-north-4.myhuaweicloud.com/om/ds:0.1.62
-          resources:
+          image: swr.cn-north-4.myhuaweicloud.com/om/ds:0.1.63
+          resources
             limits:
               cpu: 2000m
               memory: 8000Mi
