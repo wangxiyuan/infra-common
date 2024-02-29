@@ -54,6 +54,10 @@ spec:
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/easysoftware/easysoftware-website-test:master-50b75c
         imagePullPolicy: IfNotPresent
+        name: website
+        env:
+        - name: DET_URL
+          value: https://easysoftware.test.osinfra.cn
         ports:
         - containerPort: 8080
           name: http
