@@ -55,6 +55,7 @@ spec:
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.kafkaCA }}
           {{- end }}
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
       labels:
         app: server
     spec:
@@ -63,7 +64,9 @@ spec:
       - name: huawei-swr-image-pull-secret
       securityContext:
         seccompProfile:
-          type: RuntimeDefault
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-server-test:main-1a1436
         imagePullPolicy: IfNotPresent        
@@ -105,3 +108,11 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
+      volumes:
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

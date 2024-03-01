@@ -48,12 +48,18 @@ spec:
           {{- with secret "internal/data/infra-test/merlin" -}}  
           {{ .Data.data.kafkaCA }}
           {{- end }}
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
       labels:
         app: gitea-repo
     spec:
       serviceAccount: gitea-repo
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - name: gitea-build
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:v1.0.20240201091417
@@ -103,3 +109,10 @@ spec:
       - name: tmp-gitea-data-volume
         persistentVolumeClaim:
           claimName: tmp-gitea-data-volume
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
