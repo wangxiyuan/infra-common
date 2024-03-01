@@ -17,7 +17,7 @@ spec:
       - name: huawei-swr-image-pull-secret
       containers:
         - name: datastat-server
-          image: swr.cn-north-4.myhuaweicloud.com/om/ds:0.1.63
+          image: swr.cn-north-4.myhuaweicloud.com/om/ds:0.1.64
           resources:
             limits:
               cpu: 2000m
@@ -65,6 +65,9 @@ spec:
               name: datastat-server-secrets-volume
             - mountPath: /var/lib/ds/foundry.properties
               subPath: foundry_properties
+              name: datastat-server-secrets-volume
+            - mountPath: /var/lib/ds/software.properties
+              subPath: software_properties
               name: datastat-server-secrets-volume
       volumes:
         - name: datastat-server-secrets-volume
