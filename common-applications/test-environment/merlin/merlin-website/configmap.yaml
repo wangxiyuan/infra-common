@@ -237,10 +237,12 @@ data:
             proxy_buffering off;
             proxy_request_buffering off;
             proxy_ssl_verify	off;
+            proxy_intercept_errors on;
         }
 
         error_page 401 402 403 405 406 407 413 414 /error.html;
         error_page 500 501 502 503 504 505 /error.html;
+        error_page 404 /index.html;
 
         location = /error.html {
           root /usr/share/nginx/www;
