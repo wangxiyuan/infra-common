@@ -31,6 +31,7 @@ spec:
           {{- with secret "internal/data/icsl/merlin" -}}  
           {{ .Data.data.kafkaCA }}
           {{- end }}
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
       labels:
         app: label
     spec:
@@ -44,6 +45,11 @@ spec:
       serviceAccount: merlin-icsl
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-label-test:new
         imagePullPolicy: IfNotPresent        
@@ -61,3 +67,11 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
+      volumes:
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

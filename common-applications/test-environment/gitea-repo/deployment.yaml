@@ -48,12 +48,18 @@ spec:
           {{- with secret "internal/data/infra-test/gitea-repo-sh" -}}  
           {{ .Data.data.kafkaCA }}
           {{- end }}
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
       labels:
         app: gitea-repo-sh
     spec:
       serviceAccount: gitea-repo-sh
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - name: gitea-build
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/gitea-build:6b8591254cd6577c4114dc4140b79453515a6848811a1bfcc52519c6131a4f7a
@@ -103,3 +109,10 @@ spec:
       - name: tmp-gitea-sh-data-volume
         persistentVolumeClaim:
           claimName: tmp-gitea-sh-data-volume
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

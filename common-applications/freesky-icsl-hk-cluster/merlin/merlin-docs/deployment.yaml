@@ -41,6 +41,7 @@ spec:
           {{- with secret "internal/data/icsl/merlin-website" -}}
           {{ .Data.data.dhparamPem }}
           {{- end }}
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
       labels:
         app: merlin-docs
     spec:
@@ -54,6 +55,11 @@ spec:
       serviceAccount: merlin-icsl
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - name: merlin-docs
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/gitea/merlin-docs-test:main-c58942
@@ -95,3 +101,11 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
           runAsUser: 1000
+      volumes:
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
