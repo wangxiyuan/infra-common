@@ -2,7 +2,6 @@ resources:
 - service.yaml
 - deployment.yaml
 - autoscaler.yaml
-- configmap.yaml
 commonLabels:
   app: merlin-website
 namespace: merlin
