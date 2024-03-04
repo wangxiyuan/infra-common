@@ -1,11 +1,11 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: label-autoscaler
+  name: message-server-autoscaler
   namespace: merlin
 spec:
   scaleTargetRef:
-    name: label
+    name: message-server
   triggers:
   - type: cron
     metadata:

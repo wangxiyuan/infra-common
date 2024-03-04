@@ -6,7 +6,7 @@ resources:
 - merlin-website
 - merlin-docs
 - hook-delivery
-- label
+- message-server
 - git-access
 - space
 namespace: merlin
