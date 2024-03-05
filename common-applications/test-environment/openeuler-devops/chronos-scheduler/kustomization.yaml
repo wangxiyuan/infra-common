@@ -7,7 +7,7 @@ commonAnnotations:
   kubernetes.ops.region: shanghai
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-devops/chronos_scheduler
-  newTag: master-48016d
+  newTag: v1.0.20240305163008
 kind: Kustomization
 namespace: openeuler-devops
 resources:
