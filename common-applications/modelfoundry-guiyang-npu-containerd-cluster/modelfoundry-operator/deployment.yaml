@@ -107,6 +107,20 @@ spec:
                 description: 'Image pull policy: One of Always, Never, IfNotPresent.
                   See also: https://kubernetes.io/docs/concepts/containers/images#updating-images'
                 type: string
+              imagePullSecrets:
+                description: Image pull secrets is a reference to the secret to be
+                  used to pull the image.
+                items:
+                  description: LocalObjectReference contains enough information to
+                    let you locate the referenced object inside the same namespace.
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        TODO: Add other useful fields. apiVersion, kind, uid?'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
               name:
                 description: Name of the Space App specified as a DNS_LABEL. Each
                   App must have a unique name.
