@@ -30,7 +30,7 @@ spec:
         - mountPath: /etc/radiaTest/server.ini
           name: radiatest-secret
           subPath: server.ini
-        - mountPath: /tmp
+        - mountPath: /opt/radiaTest/tmp/testcase
           name: casefile-resolver-share
         resources:
           requests:

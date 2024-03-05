@@ -39,7 +39,7 @@ spec:
           name: messengers-certifi-storage
         - mountPath: /etc/radiaTest_ssl
           name: ssl-data
-        - mountPath: /tmp
+        - mountPath: /opt/radiaTest/tmp/testcase
           name: gunicorn-share
         - mountPath: /var/radiaTest/pkglist
           name: pkglist-storage

@@ -12,8 +12,6 @@ kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/casefile_resolver
   newTag: v1.0.20240229170846
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/celery_flower
-  newTag: v1.0.20240229170846
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/celerybeat
   newTag: v1.0.20240229170846
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/database_updator

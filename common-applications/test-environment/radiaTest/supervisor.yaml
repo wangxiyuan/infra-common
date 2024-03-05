@@ -56,7 +56,7 @@ spec:
           name: messengers-certifi-storage
         - mountPath: /etc/radiaTest_ssl
           name: ssl-data
-        - mountPath: /tmp
+        - mountPath: /opt/radiaTest/tmp/testcase
           name: gunicorn-share
         - mountPath: /var/radiaTest/pkglist
           name: pkglist-storage
@@ -174,7 +174,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/radiaTest
           name: casefile-resolver-configure
-        - mountPath: /tmp
+        - mountPath: /opt/radiaTest/tmp/testcase
           name: casefile-resolver-share
         resources:
           requests:
@@ -364,7 +364,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/radiaTest
           name: root-resolver-configure
-        - mountPath: /tmp
+        - mountPath: /opt/radiaTest/tmp/testcase
           name: root-resolver-share
         - mountPath: /var/radiaTest/pkglist
           name: pkglist-share
@@ -471,63 +471,6 @@ spec:
           defaultMode: 420
           name: supervisor-radiatest-configmap
         name: openqa-reader-configure
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: celery-flower
-  namespace: radia-test
-spec:
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 1
-    type: RollingUpdate
-  selector:
-    matchLabels:
-      app: celery-flower
-  template:
-    metadata:
-      labels:
-        app: celery-flower
-    spec:
-      imagePullSecrets:
-      - name: huawei-swr-image-pull-secret
-      nodeSelector:
-        infra: "true"
-      containers:
-      - name: celery-flower
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/radia-test/celery_flower:v1.0.20230612194055
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: AMQP_USER
-          valueFrom:
-            secretKeyRef:
-              key: amqp_user
-              name: radia-test-secret
-        - name: AMQP_PASSWD
-          valueFrom:
-            secretKeyRef:
-              key: amqp_passwd
-              name: radia-test-secret
-        - name: AMQP_HOST
-          valueFrom:
-            secretKeyRef:
-              key: amqp_host
-              name: radia-test-secret
-        - name: AMQP_PORT
-          valueFrom:
-            secretKeyRef:
-              key: amqp_port
-              name: radia-test-secret
-        resources:
-          requests:
-            cpu: 1000m
-            memory: 1000Mi
-          limits:
-            cpu: 1000m
-            memory: 1000Mi
 
 
 
