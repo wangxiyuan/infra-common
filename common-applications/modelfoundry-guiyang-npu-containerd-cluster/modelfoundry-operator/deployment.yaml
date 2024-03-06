@@ -121,6 +121,12 @@ spec:
                   type: object
                   x-kubernetes-map-type: atomic
                 type: array
+              ingressHost:
+                description: The ingress domain for the app.
+                type: string
+              ingressTLSSecret:
+                description: The ingress tls secret name for the app.
+                type: string
               name:
                 description: Name of the Space App specified as a DNS_LABEL. Each
                   App must have a unique name.
